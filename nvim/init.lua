@@ -1,0 +1,98 @@
+-- Painting the tab background black
+vim.cmd(':hi TabLineFill term=bold cterm=bold ctermbg=0')
+vim.cmd(':hi SignColumn term=bold cterm=bold ctermbg=0')
+vim.opt.encoding = 'utf-8'
+vim.opt.backspace = 'indent,eol,start'
+vim.opt.startofline = true
+vim.opt.timeout = false
+vim.opt.ttimeout = true
+vim.opt.ttimeoutlen = 100
+vim.opt.showmatch = true
+vim.opt.scrolloff = 8
+-- vim.opt.listchars:append({ tab = '> ' })
+vim.opt.list = false
+vim.opt.foldenable = false
+vim.opt.wrap = true
+vim.opt.eol = false
+vim.opt.showbreak = '↪'
+vim.opt.number = true
+vim.opt.numberwidth = 3
+vim.opt.signcolumn = 'yes'
+vim.opt.modelines = 0
+vim.opt.showcmd = true
+vim.opt.incsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.matchtime = 1
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.swapfile = false
+vim.opt.wildmenu = true
+
+vim.opt.updatetime = 300
+
+require( 'plugins' )
+
+require( 'nvim-treesitter.configs' ).setup {
+  ensure_installed = { 'c', 'rust', 'lua', 'markdown', 'c_sharp', 'bash', 'html', 'json5', 'yaml' },
+
+  sync_install = true,
+  auto_install = true,
+
+  highlight = {
+    enable = true,
+    disable = { 'yaml.ansible', 'ansible' },
+  },
+}
+
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+vim.g.mapleader = ' '
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+
+require("coc")
