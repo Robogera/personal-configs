@@ -1,0 +1,178 @@
+icon: &icon Font Awesome:style=Regular:pixelsize=18
+tags: &tags Font Awesome:style=Regular:pixelsize=22
+
+bar:
+  height: 36
+  location: top
+  layer: bottom
+  spacing: 0
+  font: Cascadia Code:size=15:weight=regular
+  left-margin: 15
+  right-margin: 15
+  foreground: F1F1F1FF
+  background: 11111100
+  
+  left:
+    - label:
+        content: {string: {text: '', font: Font Awesome:size=22}}
+  center:
+    - i3:
+        anchors:
+          - string: &workspace
+              margin: 5
+              on-click: 'swaymsg --quiet workspace {name}'
+              font: Font Awesome 5 Free:style=solid:pixelsize=22
+          - string: &hidden {foreground: f1f1f199}
+          - string: &1 {text: '❶'}
+          - string: &2 {text: '❷'}
+          - string: &3 {text: '❸'}
+          - string: &4 {text: '❹'}
+          - string: &5 {text: '❺'}
+          - string: &6 {text: '❻'}
+          - string: &7 {text: '❼'}
+          - string: &8 {text: '❽'}
+          - string: &extra {text: ''}
+        content:
+          1:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*1, *workspace, *hidden]}}
+                true: {string: {<<: [*1, *workspace]}}
+          2:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*2, *workspace, *hidden]}}
+                true: {string: {<<: [*2, *workspace]}}
+          3:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*3, *workspace, *hidden]}}
+                true: {string: {<<: [*3, *workspace]}}
+          4:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*4, *workspace, *hidden]}}
+                true: {string: {<<: [*4, *workspace]}}
+          5:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*5, *workspace, *hidden]}}
+                true: {string: {<<: [*5, *workspace]}}
+          6:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*6, *workspace, *hidden]}}
+                true: {string: {<<: [*6, *workspace]}}
+          7:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*7, *workspace, *hidden]}}
+                true: {string: {<<: [*7, *workspace]}}
+          8:
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*8, *workspace, *hidden]}}
+                true: {string: {<<: [*8, *workspace]}}
+          "":
+            map:
+              tag: visible
+              values:
+                false: {string: {<<: [*extra, *workspace, *hidden]}}
+                true: {string: {<<: [*extra, *workspace]}}
+  right:
+    - label:
+        content: {string: {text: '[ '}}
+    - mem:
+        interval: 915
+        content:
+          ramp:
+            tag: percent_used
+            items:
+              - string: {text: ' {percent_used}%'}
+              - string: {text: ' {percent_used}%'}
+              - string: {text: ' {percent_used}%'}
+              - string: {text: ' {percent_used}%', foreground: ff6347ff}
+              - string: {text: ' {percent_used}%', foreground: ffa500ff}
+    - label:
+        content: {string: {text: ' | '}}
+    - cpu:
+        interval: 900
+        content:
+          ramp:
+            tag: cpu
+            items:
+              - string: {text: ' {cpu}%'}
+              - string: {text: ' {cpu}%'}
+              - string: {text: ' {cpu}%'}
+              - string: {text: ' {cpu}%', foreground: ff6347ff}
+              - string: {text: ' {cpu}%', foreground: ffa500ff}
+    - label:
+        content: {string: {text: ' ]'}}
+    - network:
+        name: eno1
+        poll-interval: 5
+        content:
+          map:
+            tag: state
+            values:
+              unknown:
+                string: {text: '[ UNKNOWN  ]'}
+              not present:
+                string: {text: '[ NONE  ]'}
+              lower layers down:
+                string: {text: '[ LLD  ]'}
+              testing:
+                string: {text: '[ {ipv4}  ]'}
+              dormant:
+                string: {text: '[ {ipv4}  ]'}
+              down:
+                string: {text: '[ OFFLINE  ]'}
+              up:
+                string: {text: '[ {ipv4}  ]'}
+    - sway-xkb:
+        identifiers:
+          - '1:1:AT_Translated_Set_2_keyboard'
+        content:
+          string: {text: '[ {layout} ]'}
+    - battery:
+        poll-interval: 40
+        name: BAT0
+        anchors:
+          discharging: &discharging
+            list:
+              items:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: '[ {capacity}%  ]', foreground: ff6347ff}
+                      - string: {text: '[ {capacity}%  ]', foreground: ffa500ff}
+                      - string: {text: '[ {capacity}%  ]'}
+                      - string: {text: '[ {capacity}%  ]'}
+                      - string: {text: '[ {capacity}%  ]'}
+        content:
+          map:
+            tag: state
+            values:
+              unknown:
+                - string: {text: 'ERR  ', foreground: ff6347ff}
+              discharging:
+                <<: *discharging
+              charging:
+                - string: {text: '[ {capacity}% ]'}
+              not charging:
+                <<: *discharging
+              full:
+                - string: {text: '[ {capacity}%  ]'}
+    - clock:
+        time-format: '%k:%M'
+        date-format: '%e(%a) %b %V'
+        content:
+          string: {text: '[ {time} | {date} ]'}

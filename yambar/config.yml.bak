@@ -1,0 +1,101 @@
+icon: &icon Font Awesome:style=Regular:pixelsize=18
+tags: &tags Font Awesome:style=Regular:pixelsize=22
+
+bar:
+  height: 36
+  location: top
+  layer: top
+  spacing: 15
+  font: Cascadia Code:size=15:weight=regular
+  left-margin: 16
+  right-margin: 16
+  foreground: F1F1F1FF
+  background: 11111100
+  
+  left:
+    - label:
+        content: {string: {text: '', font: Font Awesome:size=22}}
+  center:
+    - river:
+        anchors:
+          - base: &river_base
+              margin: 6
+              conditions:
+                id == 1: {string: {text: 󰀚 , font: *tags}}  
+                id == 2: {string: {text: 󰎧 , font: *tags}}  
+                id == 3: {string: {text: 󰎪 , font: *tags}}  
+                id == 4: {string: {text: 󰎭 , font: *tags}}  
+                id == 5: {string: {text: 󰎱 , font: *tags}}  
+                id == 6: {string: {text: 󰎳 , font: *tags}}  
+                id == 7: {string: {text: 󰎶 , font: *tags}}  
+                id == 8: {string: {text: 󰎹 , font: *tags}}  
+                id == 9: {string: {text: 󰎼 , font: *tags}}  
+                id == 10: {string: {text: 󰽽, font: *tags}}  
+        content:
+          map:
+            tag: occupied
+            values:
+              false: {empty: {}}
+              true:
+                string:
+                  margin: 5
+                  text: '{id}: {state}'
+  right:
+    - network:
+        name: eno1
+        poll-interval: 5
+        content:
+          map:
+            tag: state
+            values:
+              unknown:
+                string: {text: 'UNKNOWN '}
+              not present:
+                string: {text: 'NONE '}
+              lower layers down:
+                string: {text: 'LLD '}
+              testing:
+                string: {text: '{ipv4} '}
+              dormant:
+                string: {text: '{ipv4} '}
+              down:
+                string: {text: 'OFFLINE '}
+              up:
+                string: {text: '{ipv4} '}
+    - battery:
+        poll-interval: 40
+        name: BAT0
+        anchors:
+          discharging: &discharging
+            list:
+              items:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: '{capacity}%  ', foreground: ff6347ff}
+                      - string: {text: '{capacity}%  ', foreground: ffa500ff}
+                      - string: {text: '{capacity}%  '}
+                      - string: {text: '{capacity}%  '}
+                      - string: {text: '{capacity}%  '}
+        content:
+          map:
+            tag: state
+            values:
+              unknown:
+                - string: {text: 'ERR  ', foreground: ff6347ff}
+              discharging:
+                <<: *discharging
+              charging:
+                - string: {text: '{capacity}% '}
+              not charging:
+                <<: *discharging
+              full:
+                - string: {text: '{capacity}%  '}
+    - xkb:
+        content:
+          string: {text: '{symbol}'}
+    - clock:
+        time-format: '%k:%M'
+        date-format: '%e(%a) %b %V'
+        content:
+          string: {text: '{time} | {date}'}
